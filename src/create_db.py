@@ -3,7 +3,7 @@ from pathlib import Path
 import os
 
 
-def process_file(cursor, file_path):
+def add_stems(cursor, file_path):
 
     # level = int(file_path.stem.split("_")[-1])  # Extract level from file name
     level = 1
@@ -31,6 +31,26 @@ def process_file(cursor, file_path):
                 ''', (item_id, level, test_id, complete_word, parts[0], parts[1], parts[2], parts[3], parts[4], parts[5]))
 
 
+def add_meanings(file_name):
+    with open(file_name, "r", encoding="utf-8") as file:
+        for line in file:
+            # Skip empty lines
+            if not line.strip():
+                continue
+
+            # Split the line into fragment and meaning
+            stem, meaning = line.strip().split("\t", 1)
+
+            # Insert the data into the database
+            cursor.execute('''
+            INSERT INTO stem_info (stem, meaning)
+            VALUES (?, ?)
+            ''', (stem, meaning))
+
+        # Commit changes after processing each file
+        conn.commit()
+
+
 if __name__ == '__main__':
 
     db_path = "databases/bound_stems_database.db"
@@ -42,6 +62,10 @@ if __name__ == '__main__':
     # Database setup
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
+
+    cursor.execute('''
+        DROP TABLE IF EXISTS words
+        ''')
 
     # Create table
     cursor.execute('''
@@ -59,13 +83,32 @@ if __name__ == '__main__':
         )
     ''')
 
-    # Process all files
+    cursor.execute('''
+        DROP TABLE IF EXISTS stem_info
+        ''')
+
+    # Create the fragments table
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS stem_info (
+            stem TEXT,
+            meaning TEXT
+        )
+    ''')
+
+    # Create stems table
     list_directory = "resources"
     file_paths = ["bound_stems.txt"]
     for file_path in file_paths:
         file_path = os.path.join(list_directory, file_path)
         # print(file_path)
-        process_file(cursor, Path(file_path))
+        add_stems(cursor, Path(file_path))
+
+    # Create meanings table
+    file_name = f"resources/bound_stem_meanings.txt"
+    if os.path.exists(file_name):
+        add_meanings(file_name)
+    else:
+        print(f"File {file_name} not found. Skipping.")
 
     # Commit changes and close the connection
     conn.commit()
