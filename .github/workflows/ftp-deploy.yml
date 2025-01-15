@@ -20,5 +20,5 @@ jobs:
           port: 21
           protocol: ftps
           local-dir: "./src/"  # Directory to upload, change as needed
-          server-dir: "./software/affixtrainer/"
+          server-dir: "./software/wordstemtrainer/"
           timeout: 600000
