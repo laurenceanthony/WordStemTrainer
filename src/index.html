@@ -33,14 +33,18 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             /* Optional: Add a subtle shadow */
         }
+
+        .version {
+            font-size: 0.6em;
+        }
     </style>
 </head>
 
 <body>
     <div class="container" style="padding-top: 20px">
-        <h2>WordStemTrainer</h2>
-        <p>A training tool for high-intermediate and advanced learners of English who already know more than
-            5,000-6,000 words.</p>
+        <h2>WordStemTrainer <span class="version">(ver. 1.00)</span></h2>
+        <div>A training tool for high-intermediate and advanced learners of English who already know more than
+            5,000-6,000 words.</div>
     </div>
     <div class="container">
         <form id="search-form">
@@ -58,66 +62,78 @@
                     </select>
                 </div>
                 <!-- Submit button aligned at the bottom on larger screens -->
-                <div class="col-12 col-md-3">
-                    <p>Score</p>
-                    <p id="score">
-                        <span id="current_score">0</span>/<span id="total_test_items">0</span>
-                    </p>
-                </div>
             </div>
 
             <div class="row mb-3">
-                <h6 class="mb-0">Quiz item: <span id="current_item_id">0</span></h6>
+                <h6 class="mb-0">Quiz item:
+                    <span id="current_item_id" class="me-3">0</span>
+                    <span>Score</span>
+                    <span id="current_score">0</span>/
+                    <span id="total_test_items" class="me-3">0</span>
+                    <span>Answer: </span>
+                    <span id="correct_incorrect" style="width: 200px; color:red">
+                    </span>
+                </h6>
                 <div class="form-text">
-                    Separate the stem from its affixes by adding a space before it or after it, or both before and after
-                    it. There will be a few short words that cannot be broken into parts. They are here to help you
-                    learn the stem. (e.g. going => go ing)
+                    Separate the stem from the affixes (if any) by adding spaces. (e.g. going => go ing)
                 </div>
             </div>
 
             <div class="row mb-3">
-                <div class="col-12 col-md-6 d-flex flex-column flex-md-row justify-content-start align-items-center">
-                    <!-- Buttons below the Quiz item, stacked on small screens and horizontal on larger screens -->
-                    <div class="flex-grow-1 me-3 mb-2" style="min-width: 300px;">
-                        <div id="quiz_item" class="border rounded p-2" contenteditable="true"></div>
+                <div>
+                    <div class="row g-3">
+                        <!-- Quiz Item -->
+                        <div class="col-6 col-md-auto">
+                            <div class="border rounded p-2" id="quiz_item" contenteditable="true"
+                                style="min-height: 20px; min-width: 200px;"></div>
+                        </div>
+                        <!-- Check Button -->
+                        <div class="col-6 col-md-auto">
+                            <button id="check" type="button" class="btn btn-success w-100" style="min-width: 140px;">
+                                Check
+                            </button>
+                        </div>
+                        <!-- Answer Button -->
+                        <div class=" col-6 col-md-auto">
+                            <button id="answer" type="button" class="btn btn-danger w-100" style="min-width: 140px;">
+                                Show Answer
+                            </button>
+                        </div>
+                        <!-- Next Question Button -->
+                        <div class="col-6 col-md-auto">
+                            <button id="next" type="button" class="btn btn-secondary w-100" style="min-width: 140px;">
+                                Next question
+                            </button>
+                        </div>
                     </div>
-                    <button id="check" type="button" class="btn btn-success flex-grow-1 me-3 mb-2"
-                        style="min-width: 150px;">
-                        Check
-                    </button>
-                    <button id="answer" type="button" class="btn btn-danger flex-grow-1 me-3 mb-2"
-                        style="min-width: 150px;">
-                        Show Answer
-                    </button>
-                    <div class="flex-grow-1 me-3 mb-2" id="affix_meaning">
-                    </div>
-
-                    <b id="correct_incorrect" style="width: 200px; color:red">
-                    </b>
                 </div>
             </div>
 
             <div class="row mb-3">
-                <div class="col-12 col-md-6 d-flex flex-column flex-md-row justify-content-start align-items-center">
-                    <!-- Buttons below the Quiz item, stacked on small screens and horizontal on larger screens -->
-                    <button id="restart" type="button" class="btn btn-primary flex-grow-1 me-3 mb-2"
-                        style="min-width: 150px;">
-                        Restart item
-                    </button>
-                    <button id="next" type="button" class="btn btn-secondary flex-grow-1 me-3 mb-2"
-                        style="min-width: 200px;">
-                        Go to next question
-                    </button>
-                    <button id="hint" type="button" class="btn btn-dark flex-grow-1 me-3 mb-2"
-                        style="min-width: 200px;">
-                        Show all stems
-                    </button>
+                <div>
+                    <div class="row g-3">
+                        <!-- Restart Button -->
+                        <div class="col-6 col-md-auto">
+                            <button id="restart" type="button" class="btn btn-primary w-100">
+                                Restart item
+                            </button>
+                        </div>
+                        <!-- Show stems Button -->
+                        <div class="col-6 col-md-auto">
+                            <button id="hint" type="button" class="btn btn-dark w-100">
+                                Show all stems
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div id="stem_list" class="container p-3 bg-light" style="display: none;">
-            </div>
+
+        </form>
+        <div class="row mb-3">
+            <div id="stem_list" class="container p-3 bg-light" style="display: none;"></div>
+        </div>
     </div>
-    </form>
+
     <div id="end_of_test" class="container" style="text-align: center; display: none;">
         This is the end of the test <button id="restart_test" type="button" class="btn btn-dark"
             style="margin-left: 10px;">Start new test</button>
