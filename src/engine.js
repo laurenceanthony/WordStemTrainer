@@ -150,7 +150,7 @@ function getStemInfo() {
     xhttp.onload = function () {
         try {
             stem_info = JSON.parse(this.responseText);
-            console.log(stem_info)
+            // console.log(stem_info)
 
             let values = stem_info.map(row => `<div>${row[0]}<br>${row[1]}<br><br><div>`).join('')
             values = values.replaceAll('e.g.', '<br>e.g.');
